@@ -1,48 +1,38 @@
 import cv2
 import numpy as np
-import utils
-
+import utlis
 
 def getLaneCurve(img):
     imgCopy = img.copy()
-    ##step 1
-    imgThres = utils.thresholding(img)
-    
-    #step 2
-    h, w, c = img.shape
-    points = utils.valTrackBars()
-    imgWarp = utils.warpImg(imgThres, points, w, h)
-    imgWrapPoints  =utils.drawPoints(imgCopy, 
-                                     points)
+    ## step 1
+    imgThres = utlis.thresholding(img)
     cv2.imshow('Thres',imgThres)
-    cv2.imshow('Wrap',imgWarp)
-    cv2.imshow('Wrap points',imgWrapPoints)
-        
     
+    ## step 2
+    h,w,c = img.shape
+    points = utlis.valTrackbars()
+    
+    imgWarp = utlis.warpImg(imgThres,points,w,h)
+    cv2.imshow('Warp',imgWarp)
+    
+    imgWarpPoints = utlis.drawPoints(imgCopy,points)
+    cv2.imshow('Warp Points',imgWarpPoints)
     return None
-    
-    
 
 if __name__ == '__main__':
     cap = cv2.VideoCapture('vid.mp4')
-    initializeTrackbarVals =[102,80,20,214]
-    utils.initializeTrackbars(initializeTrackbarVals)
-  
-    while (cap.isOpened()):
-        ret, img = cap.read() 
-        #cv2.namedWindow("window", cv2.WND_PROP_FULLSCREEN)
-        #cv2.setWindowProperty("window",cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN)
-        
-        if ret:
-            img = cv2.resize(img,(480,240))
-            getLaneCurve(img)
-            cv2.imshow("Vid", img)
-        else:
-           print('no video')
-           cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
-           continue
-        
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-       
-    
+    intialTracbarVals = [142,83,79,240]
+    utlis.initializeTrackbars(intialTracbarVals)
+    frameCounter = 0
+    while True:
+        frameCounter +=1
+        if cap.get(cv2.CAP_PROP_FRAME_COUNT) ==frameCounter:
+            cap.set(cv2.CAP_PROP_POS_FRAMES,0)
+            frameCounter=0
+            
+        _, img = cap.read() # GET THE IMAGE
+        img = cv2.resize(img,(640,480)) # RESIZE
+        getLaneCurve(img)
+        cv2.imshow("Vid",img)
+        cv2.waitKey(1)
+
