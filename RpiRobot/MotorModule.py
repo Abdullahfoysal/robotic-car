@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
 from time import sleep
-GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
  
  
@@ -21,6 +21,7 @@ class Motor():
         self.mySpeed=0
  
     def move(self,speed=0.5,turn=0,t=0):
+        #print("Turn : ",turn)
         speed *=100
         turn *=70
         leftSpeed = speed-turn
@@ -30,7 +31,7 @@ class Motor():
         elif leftSpeed<-100: leftSpeed = -100
         if rightSpeed>100: rightSpeed =100
         elif rightSpeed<-100: rightSpeed = -100
-        #print(leftSpeed,rightSpeed)
+        #print("left right : ",leftSpeed,rightSpeed)
         self.pwmA.ChangeDutyCycle(abs(leftSpeed))
         self.pwmB.ChangeDutyCycle(abs(rightSpeed))
         if leftSpeed>0:GPIO.output(self.In1A,GPIO.HIGH);GPIO.output(self.In2A,GPIO.LOW)

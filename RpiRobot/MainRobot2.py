@@ -1,7 +1,9 @@
 import cv2
 import numpy as np
 import utlis
- 
+from MotorModule import Motor
+
+motor= Motor(12,8,10,33,35,37)
 curveList = []
 avgVal=10
 cap = cv2.VideoCapture('vid.mp4')
@@ -80,7 +82,19 @@ if __name__ == '__main__':
          
         img = getImage()
         img = cv2.resize(img,(480,240))
-        curve = getLaneCurve(img,display=2)
+        curveVal = getLaneCurve(img,display=2)
         #print(curve)
         #cv2.imshow('Vid',img)
+        
+        sen = 1.3  # SENSITIVITY
+        maxVAl= 0.3 # MAX SPEED
+        if curveVal>maxVAl:curveVal = maxVAl
+        if curveVal<-maxVAl: curveVal =-maxVAl
+        
+        if curveVal>0:
+            sen =1.7
+            if curveVal<0.05: curveVal=0
+        else:
+            if curveVal>-0.08: curveVal=0
+        motor.move(0.20,-curveVal*sen,0.05)
         cv2.waitKey(1)

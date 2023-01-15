@@ -50,13 +50,13 @@ def getHistogram(img,minPer=0.1,display= False,region=1):
     else:
         histValues = np.sum(img[img.shape[0]//region:,:], axis=0)
  
-    #print(histValues)
+    #print("Histogram : ",histValues)
     maxValue = np.max(histValues)
     minValue = minPer*maxValue
  
     indexArray = np.where(histValues >= minValue)
     basePoint = int(np.average(indexArray))
-    #print(basePoint)
+    print(basePoint)
  
     if display:
         imgHist = np.zeros((img.shape[0],img.shape[1],3),np.uint8)
