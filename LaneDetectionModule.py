@@ -84,4 +84,3 @@ if __name__ == '__main__':
         #print(curve)
         #cv2.imshow('Vid',img)
         cv2.waitKey(1)
-
