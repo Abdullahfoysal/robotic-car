@@ -8,9 +8,11 @@ import MotorModule as mM
 #######################################
 steeringSen = 0.70  # Steering Sensitivity
 maxThrottle = 0.22  # Forward Speed %
-motor = mM.Motor(2, 3, 4, 17, 22, 27) # Pin Numbers
-model = load_model('/home/pi/Desktop/My Files/RpiRobot/model_V1.h5')
+motor = mM.Motor(12,8,10,33,35,37) # Pin Numbers
+#model = load_model('/home/pi/robotic-car/Implementation/model.h5')
 ######################################
+
+cap = cv2.VideoCapture('vid.mp4')
 
 def preProcess(img):
     img = img[54:120, :, :]
@@ -20,13 +22,21 @@ def preProcess(img):
     img = img / 255
     return img
 
+def getImg(display= False,size=[480,240]):
+    _, img = cap.read()
+    img = cv2.resize(img,(size[0],size[1]))
+    if display:
+        cv2.imshow('IMG',img)
+    return img
+
 while True:
 
-    img = wM.getImg(True, size=[240, 120])
+    #img = wM.getImg(True, size=[240, 120])
+    img = getImg(True, size=[480, 240])
     img = np.asarray(img)
     img = preProcess(img)
     img = np.array([img])
-    steering = float(model.predict(img))
-    print(steering*steeringSen)
-    motor.move(maxThrottle,-steering*steeringSen)
+    #steering = float(model.predict(img))
+    #print(steering*steeringSen)
+    #motor.move(maxThrottle,-steering*steeringSen)
     cv2.waitKey(1)
