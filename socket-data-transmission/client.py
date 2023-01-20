@@ -12,7 +12,7 @@ from PIL import Image
 from io import BytesIO
 
 sio = socketio.Client()
-
+cap = cv2.VideoCapture('vid.mp4')
 
 def encodeImage():
     
@@ -21,10 +21,28 @@ def encodeImage():
         data = base64.b64encode(image_file.read())
     
     return data
+ 
+def getImage():
+    success, img = cap.read()
+    return img
 
 def send_image():
-    img = encodeImage()
-    sio.emit('messageFromClient',{'img': img})
+    
+    frameCounter = 0
+    while True:
+        frameCounter += 1
+        if cap.get(cv2.CAP_PROP_FRAME_COUNT) == frameCounter:
+            cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+            frameCounter = 0
+            break
+         
+        img = getImage()
+        img = base64.b64encode(img)
+        sio.emit('messageFromClient',{'img': img})
+        cv2.waitKey(1)
+        
+        
+
 
 def send_sensor_reading():
     while True:
@@ -45,5 +63,5 @@ def messageFromServer(data):
 def disconnect():
     print('disconnected from server')
 
-sio.connect('http://192.168.31.255:5555')
+sio.connect('http://192.168.31.168:5010')
 sio.wait()
