@@ -5,7 +5,7 @@ Created on Sat Jan 14 16:01:44 2023
 
 @author: foysalmac
 """
-
+import cv2
 import socketio
 import base64
 from PIL import Image
@@ -38,7 +38,8 @@ def send_image():
          
         img = getImage()
         img = base64.b64encode(img)
-        sio.emit('messageFromClient',{'img': img})
+        #sio.emit('messageFromClient',{'img': img})
+        sio.emit('messageFromClient',{'camera': img})
         cv2.waitKey(1)
         
         
