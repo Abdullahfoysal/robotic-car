@@ -6,7 +6,7 @@ from MotorModule import Motor
 motor= Motor(12,8,10,33,35,37)
 curveList = []
 avgVal=10
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture('vid.mp4')
 
 def getLaneCurve(img,display=2):
     

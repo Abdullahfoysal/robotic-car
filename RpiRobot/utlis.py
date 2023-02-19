@@ -51,6 +51,7 @@ def getHistogram(img,minPer=0.1,display= False,region=1):
         histValues = np.sum(img[img.shape[0]//region:,:], axis=0)
  
     #print("Histogram : ",histValues)
+    histValues = np.asarray(histValues,dtype ='int')
     maxValue = np.max(histValues)
     minValue = minPer*maxValue
  
@@ -59,9 +60,12 @@ def getHistogram(img,minPer=0.1,display= False,region=1):
     print(basePoint)
  
     if display:
+        #print("histVal",histValues)
         imgHist = np.zeros((img.shape[0],img.shape[1],3),np.uint8)
+        #imgHist = np.asarray(imgHist,dtype ='int')
+        #print("Hist",imgHist)
         for x,intensity in enumerate(histValues):
-            cv2.line(imgHist,(x,int(img.shape[0])),(x,int(img.shape[0])-intensity//255//region),(255,0,255),1)
+            cv2.line(imgHist,(x,img.shape[0]),(x,img.shape[0]-intensity//255//region),(255,0,255),1)
             cv2.circle(imgHist,(basePoint,img.shape[0]),20,(0,255,255),cv2.FILLED)
         return basePoint,imgHist
  

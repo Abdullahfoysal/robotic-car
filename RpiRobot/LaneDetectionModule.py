@@ -81,7 +81,7 @@ if __name__ == '__main__':
         img = getImage()
         img = cv2.resize(img,(480,240))
         curve = getLaneCurve(img,display=2)
-        #print(curve)
-        #cv2.imshow('Vid',img)
+        print(curve)
+        cv2.imshow('Vid',img)
         cv2.waitKey(1)
 
