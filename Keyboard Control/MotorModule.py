@@ -21,7 +21,24 @@ class Motor():
         self.pwmA.start(0);
         self.pwmB = GPIO.PWM(self.EnaB, 100);
         self.pwmB.start(0);
- 
+
+    def motorMove(self,ls,rs):
+        if ls>0:
+            GPIO.output(self.In1A,GPIO.HIGH)
+            GPIO.output(self.In2A,GPIO.LOW)
+            print('motor a up')
+        else:
+            GPIO.output(self.In1A,GPIO.LOW)
+            GPIO.output(self.In2A,GPIO.HIGH)
+            print('motor a down')
+        if rs>0:
+            GPIO.output(self.In1B,GPIO.HIGH)
+            GPIO.output(self.In2B,GPIO.LOW)
+            print('motor b up')
+        else:
+            GPIO.output(self.In1B,GPIO.LOW)
+            GPIO.output(self.In2B,GPIO.HIGH)
+            print('motor b down')
     def move(self,speed=0.5,turn=0,t=0):
         print('move run')
         speed *=100
