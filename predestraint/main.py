@@ -11,7 +11,7 @@ labels = []
 steeringSen = 0.70  # Steering Sensitivity
 maxThrottle = 0.22  # Forward Speed %
 #motor = mM.Motor(12,8,10,33,35,37) # Pin Numbers
-model = load_model('/home/sifat/Downloads/robotic-car-sifat_dev/predestraint/saved_model.pb')
+model = load_model('/home/pi/Desktop/robotic-car/predestraint/best_model')
 ######################################
 
 cap = cv2.VideoCapture('vid.mp4')
@@ -39,14 +39,14 @@ def getImg(display= True,size=[480,240]):
     return curr_img
 def processing():
     data = []
-    img_path = '/home/sifat/Downloads/robotic-car-sifat_dev/predestraint/predestran.jpg'
+    img_path = '/home/pi/Desktop/robotic-car/predestraint/go_ahead.png'
     curr_img = cv2.imread(img_path)
     image_fromarray = Image.fromarray(curr_img, 'RGB')
     resize_image = image_fromarray.resize((30, 30))
     data.append(np.array(resize_image))
     X_test = np.array(data)
     X_test = X_test / 255
-    preds = model.predict(X_test)
+    preds = np.argmax(model.predict(X_test))
     print(preds)
 while True:
 
