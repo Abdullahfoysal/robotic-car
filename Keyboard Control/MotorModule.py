@@ -39,6 +39,8 @@ class Motor():
             GPIO.output(self.In1B,GPIO.LOW)
             GPIO.output(self.In2B,GPIO.HIGH)
             print('motor b down')
+        self.pwmA.ChangeDutyCycle(abs(ls))
+        self.pwmB.ChangeDutyCycle(abs(rs))
     def move(self,speed=0.5,turn=0,t=0):
         print('move run')
         speed *=100

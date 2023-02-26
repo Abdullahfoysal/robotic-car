@@ -12,3 +12,4 @@ def getImg(display= False,size=[480,240]):
 if __name__ == '__main__':
     while True:
         img = getImg(True)
+        cv2.waitKey(100)

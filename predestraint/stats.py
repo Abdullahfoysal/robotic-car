@@ -44,34 +44,7 @@ draw.rectangle((0, 0, oled.width, oled.height), outline=255, fill=255)
 font = ImageFont.truetype('PixelOperator.ttf', 16)
 #font = ImageFont.load_default()
 
-def drawText(txt):
-    draw.rectangle((0, 0, oled.width, oled.height), outline=0, fill=0)
 
-    # Shell scripts for system monitoring from here : https://unix.stackexchange.com/questions/119126/command-to-display-memory-usage-disk-usage-and-cpu-load
-    cmd = "hostname -I | cut -d\' \' -f1"
-    IP = subprocess.check_output(cmd, shell = True )
-    cmd = "top -bn1 | grep load | awk '{printf \"CPU: %.2f\", $(NF-2)}'"
-    CPU = subprocess.check_output(cmd, shell = True )
-    cmd = "free -m | awk 'NR==2{printf \"Mem: %s/%sMB %.2f%%\", $3,$2,$3*100/$2 }'"
-    MemUsage = subprocess.check_output(cmd, shell = True )
-    cmd = "df -h | awk '$NF==\"/\"{printf \"Disk: %d/%dGB %s\", $3,$2,$5}'"
-    Disk = subprocess.check_output(cmd, shell = True )
-    cmd = "vcgencmd measure_temp |cut -f 2 -d '='"
-    Temp = subprocess.check_output(cmd, shell = True )
-
-    # Pi Stats Display
-    
-    draw.text((0, 0), "IP: " + str(txt,'utf-8'), font=font, fill=255)
-    draw.text((0, 16), str(CPU,'utf-8') + "LA", font=font, fill=255)
-    draw.text((80, 16), str(Temp,'utf-8') , font=font, fill=255)
-    draw.text((0, 32), str(MemUsage,'utf-8'), font=font, fill=255)
-    draw.text((0, 48), str(Disk,'utf-8'), font=font, fill=255)
-        
-    # Display image
-    oled.image(image)
-    oled.show()
-    time.sleep(LOOPTIME)
-    
 while True:
 
     # Draw a black filled box to clear the image.

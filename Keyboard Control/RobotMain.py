@@ -13,8 +13,8 @@ ls=70
 rs=70
 def main():
     if kp.getKey('UP'):
-        #motor.move(0.5,0,0.1)
-        motor.moveMotor(ls,rs);
+        motor.move(0.5,0,0.1)
+        #motor.motorMove(ls,rs);
     elif kp.getKey('DOWN'):
         #motor.move(-0.5,0,0.1)
         motor.motorMove(-ls,-rs)
