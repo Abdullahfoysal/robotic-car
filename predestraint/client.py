@@ -35,14 +35,16 @@ def encodedImage(img):
     return data
 
 def send_image(img):
+    
     img = encodedImage(img)
+    #img =encodeImageFromLocal()
     sio.emit('messageFromClient',{'img': img})
 
 def send_sensor_reading():
     while True:
         img = getImg(True)
-        #send_image(img)
-        #sio.sleep(5)
+        send_image(img)
+        #sio.sleep(1)
         cv2.waitKey(1)
 
 @sio.event
@@ -60,6 +62,6 @@ def messageFromServer(data):
 def disconnect():
     print('disconnected from server')
 
-sio.connect('http://localhost:5556')
+sio.connect('http://192.168.31.168:5557')
 sio.wait()
 
