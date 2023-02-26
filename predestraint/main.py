@@ -1,7 +1,7 @@
 from tensorflow.keras.models import load_model
 import cv2
 import numpy as np
-
+from threading import Timer
 # LED IMPORT ##
 
 import time
@@ -89,11 +89,15 @@ def drawText(txt):
 if __name__ == '__main__':
     while True:
         #img = wM.getImg(True, size=[240, 120])
-        img = getImg(True)
+        #img = getImg(True)
+        _, img = cap.read()
+        img = cv2.resize(img,(480,280))
+        #cv2.imshow('IMG',img)
         #img_path = '/home/pi/Desktop/robotic-car/predestraint/go_ahead.png'
         #curr_img = cv2.imread(img_path)
+        
         value =  processing(img)
         print(sign[value])
         drawText(sign[value])
         
-        cv2.waitKey(50)
+        cv2.waitKey(1)
