@@ -12,6 +12,51 @@ import base64
 from PIL import Image
 from io import BytesIO
 
+# LED #
+
+import time
+import board
+import busio
+import digitalio
+from PIL import Image, ImageDraw, ImageFont
+import adafruit_ssd1306
+import subprocess
+# Define the Reset Pin
+oled_reset = digitalio.DigitalInOut(board.D4)
+# Display Parameters
+WIDTH = 128
+HEIGHT = 64
+BORDER = 5
+# Display Refresh
+LOOPTIME = 1.0
+# Use for I2C.
+i2c = board.I2C()
+oled = adafruit_ssd1306.SSD1306_I2C(WIDTH, HEIGHT, i2c, addr=0x3C, reset=oled_reset)
+# Clear display.
+oled.fill(0)
+oled.show()
+# Create blank image for drawing.
+# Make sure to create image with mode '1' for 1-bit color.
+image = Image.new("1", (oled.width, oled.height))
+# Get drawing object to draw on image.
+draw = ImageDraw.Draw(image)
+# Draw a white background
+draw.rectangle((0, 0, oled.width, oled.height), outline=255, fill=255)
+font = ImageFont.truetype('PixelOperator.ttf', 16)
+font1 = ImageFont.truetype('PixelOperator.ttf', 16)
+
+#     #
+
+def drawText(txt):
+    draw.rectangle((0, 0, oled.width, oled.height), outline=0, fill=0)
+    # Pi Stats Display
+    draw.text((0, 16), "Road Sign : " , font=font1, fill=255)
+    draw.text((0, 32), str(txt), font=font, fill=255)
+    # Display image
+    oled.image(image)
+    oled.show()
+    time.sleep(LOOPTIME)
+
 cap = cv2.VideoCapture(0)
 
 
@@ -45,14 +90,16 @@ def encodedImage(img):
     return data
 
 def send_image(img):
+    
     img = encodedImage(img)
+    #img =encodeImageFromLocal()
     sio.emit('messageFromClient',{'img': img})
 
 def send_sensor_reading():
     while True:
         img = getImg(True)
-        #send_image(img)
-        #sio.sleep(5)
+        send_image(img)
+        #sio.sleep(1)
         cv2.waitKey(1)
 
 @sio.event
@@ -63,6 +110,7 @@ def connect():
 @sio.event
 def messageFromServer(data):
     print('messageFromServer : prediction: ', data)
+    drawText(data["gottemp"])
     
    
 
@@ -70,6 +118,6 @@ def messageFromServer(data):
 def disconnect():
     print('disconnected from server')
 
-sio.connect('http://localhost:5556')
+sio.connect('http://192.168.31.168:5557')
 sio.wait()
 
