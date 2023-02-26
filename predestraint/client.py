@@ -6,6 +6,7 @@ Created on Sat Jan 14 16:01:44 2023
 @author: foysalmac
 """
 import cv2
+import numpy as np
 import socketio
 import base64
 from PIL import Image
@@ -13,9 +14,18 @@ from io import BytesIO
 
 cap = cv2.VideoCapture(0)
 
+
 def getImg(display= True,size=[480,240]):
     _, img = cap.read()
-    img = cv2.resize(img,(size[0],size[1]))
+    resize_frame = cv2.resize(img, dsize=(480, 240), interpolation=cv2.INTER_AREA)
+    encode_param=[int(cv2.IMWRITE_JPEG_QUALITY),90]
+    result, imgencode = cv2.imencode('.jpg', resize_frame, encode_param)
+    data = np.array(imgencode)
+    stringData = base64.b64encode(data)
+    length = str(len(stringData))
+    sio.emit('messageFromClient',{'img': stringData,'len': length})
+    
+   # img = cv2.resize(img,(size[0],size[1]))
     if display:
         cv2.imshow('IMG',img)
     return img

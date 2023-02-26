@@ -12,11 +12,11 @@ from io import BytesIO
 sio = socketio.Server()
 app = socketio.WSGIApp(sio)
 
-def processing():
+def processing(image):
     data = []
-    img_path = '/Users/foysalmac/Desktop/robotic-car/predestraint/processImage.png'
-    curr_img = cv2.imread(img_path)
-    image_fromarray = Image.fromarray(curr_img, 'RGB')
+   # img_path = '/Users/foysalmac/Desktop/robotic-car/predestraint/processImage.png'
+    #curr_img = cv2.imread(img_path)
+    image_fromarray = Image.fromarray(image, 'RGB')
     resize_image = image_fromarray.resize((30, 30))
     data.append(np.array(resize_image))
     X_test = np.array(data)
@@ -29,7 +29,12 @@ def decodeImage(data):
     im = Image.open(BytesIO(base64.b64decode(data)))
     im.save('processImage.png', 'PNG')
     return processing()
+def decode64StringImage(base64_string):
+    image = base64.b64decode(base64_string, validate=True)
+   
+    return processing(image)
 
+    
     
 
 @sio.event
@@ -39,9 +44,15 @@ def connect(sid, environ):
 @sio.event
 def messageFromClient(sid, data):
     print('messageFromClient ', "data['img']")
-    value = decodeImage(data['img'])
-    print("prdicted: ",value)
-    sio.emit('messageFromServer',{'gottemp': sign[value]})
+   # value = decode64StringImage(data['img'])
+    #print("prdicted: ",value)
+    print(data['img'],data['len'])
+    #sio.emit('messageFromServer',{'gottemp': str(value)})
+    data = np.frombuffer(base64.b64decode(data['img']), np.uint8)
+    decimg = cv2.imdecode(data, 1)
+    cv2.imshow("image", decimg)
+    cv2.waitKey(1)
+    
 
 @sio.event
 def disconnect(sid):
@@ -63,7 +74,7 @@ model = load_model('/Users/foysalmac/Desktop/robotic-car/predestraint/best_model
 
 
 if __name__ == '__main__':
-    eventlet.wsgi.server(eventlet.listen(('', 5556)), app)
+    eventlet.wsgi.server(eventlet.listen(('192.168.31.168', 5557)), app)
   # while True:
         #img = wM.getImg(True, size=[240, 120])
         #img = getImg(True)
