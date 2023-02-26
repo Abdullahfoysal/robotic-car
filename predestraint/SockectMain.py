@@ -29,10 +29,7 @@ def decodeImage(data):
     im = Image.open(BytesIO(base64.b64decode(data)))
     im.save('processImage.png', 'PNG')
     return processing()
-def decode64StringImage(base64_string):
-    image = base64.b64decode(base64_string, validate=True)
-   
-    return processing(image)
+
 
     
     
@@ -50,6 +47,9 @@ def messageFromClient(sid, data):
     #sio.emit('messageFromServer',{'gottemp': str(value)})
     data = np.frombuffer(base64.b64decode(data['img']), np.uint8)
     decimg = cv2.imdecode(data, 1)
+    result = processing(decimg)
+    print(result)
+    sio.emit('messageFromServer',{'gottemp': sign[result]})
     cv2.imshow("image", decimg)
     cv2.waitKey(1)
     
