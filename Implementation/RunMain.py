@@ -9,10 +9,10 @@ import MotorModule as mM
 steeringSen = 0.70  # Steering Sensitivity
 maxThrottle = 0.22  # Forward Speed %
 motor = mM.Motor(12,8,10,33,35,37) # Pin Numbers
-model = load_model('/home/pi/Desktop/robotic-car-sifat_dev/Implementation/model.h5')
+model = load_model('/home/pi/Desktop/robotic-car/Implementation/model.h5')
 ######################################
 
-#cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(0)
 
 def preProcess(img):
     img = img[54:120, :, :]
@@ -30,13 +30,16 @@ def getImg(display= False,size=[480,240]):
     return img
 
 while True:
-
     img = wM.getImg(True, size=[240, 120])
     #img = getImg(True)
-    img = np.asarray(img)
-    img = preProcess(img)
-    img = np.array([img])
-    steering = float(model.predict(img))
-    print(steering*steeringSen)
-    motor.move(maxThrottle,-steering*steeringSen)
+    
+    
+    img1 = np.asarray(img)
+    img2 = preProcess(img1)
+    img3 = np.array([img2])
+    steering = float(model.predict(img3))
+    cv2.putText(img, str(steering), (0, 85), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 3)
+    cv2.imshow('IMG',img)
+    #print(steering*steeringSen)
+    #motor.move(maxThrottle,-steering*steeringSen)
     cv2.waitKey(1)
