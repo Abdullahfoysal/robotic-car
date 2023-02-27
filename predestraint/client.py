@@ -68,12 +68,12 @@ def getImg(display= True,size=[480,240]):
     data = np.array(imgencode)
     stringData = base64.b64encode(data)
     length = str(len(stringData))
-    sio.emit('messageFromClient',{'img': stringData,'len': length})
+    
     
    # img = cv2.resize(img,(size[0],size[1]))
-    if display:
-        cv2.imshow('IMG',img)
-    return img
+    #if display:
+    #cv2.imshow('IMG',img)
+    return stringData,length
 
 sio = socketio.Client()
 
@@ -97,8 +97,9 @@ def send_image(img):
 
 def send_sensor_reading():
     while True:
-        img = getImg(True)
-        send_image(img)
+        stringData,length=getImg(True)
+        #send_image(img)
+        sio.emit('messageFromClient',{'img': stringData,'len': length})
         #sio.sleep(1)
         cv2.waitKey(1)
 
@@ -118,6 +119,6 @@ def messageFromServer(data):
 def disconnect():
     print('disconnected from server')
 
-sio.connect('http://192.168.31.168:5557')
+sio.connect('http://192.168.31.89:5557')
 sio.wait()
 
