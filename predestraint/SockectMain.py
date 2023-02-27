@@ -50,7 +50,7 @@ def messageFromClient(sid, data):
     result = processing(decimg)
     print(result)
     sio.emit('messageFromServer',{'gottemp': sign[result]})
-    cv2.imshow("image", decimg)
+    #cv2.imshow("image", decimg)
     cv2.waitKey(1)
     
 
@@ -74,7 +74,7 @@ model = load_model('/Users/foysalmac/Desktop/robotic-car/predestraint/best_model
 
 
 if __name__ == '__main__':
-    eventlet.wsgi.server(eventlet.listen(('192.168.31.168', 5557)), app)
+    eventlet.wsgi.server(eventlet.listen(('192.168.31.89', 5557)), app)
   # while True:
         #img = wM.getImg(True, size=[240, 120])
         #img = getImg(True)
