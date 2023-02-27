@@ -9,7 +9,7 @@ import MotorModule as mM
 steeringSen = 0.70  # Steering Sensitivity
 maxThrottle = 0.22  # Forward Speed %
 motor = mM.Motor(12,8,10,33,35,37) # Pin Numbers
-model = load_model('/home/pi/Desktop/robotic-car/Implementation/model.h5')
+model = load_model('/home/pi/Desktop/robotic-car/Implementation/nvidiamodel.h5')
 ######################################
 
 cap = cv2.VideoCapture(0)
