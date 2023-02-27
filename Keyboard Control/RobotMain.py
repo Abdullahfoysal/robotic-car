@@ -7,7 +7,7 @@ import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 
-motor= Motor(12,8,10,33,35,37)
+motor= Motor(15,11,13,33,35,37)
 kp.init()
 ls=70
 rs=70
